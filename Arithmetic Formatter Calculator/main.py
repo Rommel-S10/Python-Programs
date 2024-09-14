@@ -1,18 +1,17 @@
 def arithmetic_arranger(problems, show_answers=False):
     alphabet = 'abcdefghijklmnopkrstuvwxyz'
 
-    if len(problems) > 5: #checks that the list of objects is less than 5
+    if len(problems) > 5:
         return 'Error: Too many problems.'
-
-    for list_of_numbers in problems:  #this will check that every object has a + or - operation sign
+    for list_of_numbers in problems:
         if "+" not in list_of_numbers and '-' not in list_of_numbers:
             return "Error: Operator must be '+' or '-'."
 
-    for list_of_numbers in problems:  #this will go through every operator problem
-        for numbers in list_of_numbers: # this will go through every number to make sure that is a digit.
+    for list_of_numbers in problems:
+        for numbers in list_of_numbers:
             result = alphabet.find(numbers)
-            if result != -1: # if it is -1 then it means that a letter was not found
-                return 'Error: Numbers must only contain digits. '
+            if result != -1:
+                return 'Error: Numbers must only contain digits.'
 
     all_digits_of_problems = []
     for list_of_numbers in problems:
@@ -34,8 +33,37 @@ def arithmetic_arranger(problems, show_answers=False):
     for numbers in all_digits_of_problems:
         if len(numbers) >= 5:
             return 'Error: Numbers cannot be more than four digits.'
+    first_line = ""
+    second_line = ""
+    dashes_line = ""
+    result_line = ""
 
-    return problems
+    for problem in problems:
+        problem = problem.replace(" ", "")
+        if '+' in problem:
+            first_number, second_number = problem.split("+")
+            operator = "+"
+            result = str(int(first_number) + int(second_number))
+        elif '-' in problem:
+            first_number, second_number = problem.split("-")
+            operator = "-"
+            result = str(int(first_number) - int(second_number))
+
+        greatest_length = max(len(first_number), len(second_number))
+
+        first_line += first_number.rjust(greatest_length + 2) + "    "
+        second_line += operator + second_number.rjust(greatest_length + 1) + "    "
+        dashes_line += "-" * (greatest_length + 2) + "    "
+
+        if show_answers:
+            result_line += result.rjust(greatest_length + 2) + "    "
+
+    arithmetic_format = (first_line.rstrip() + "\n" + second_line.rstrip() + "\n" + dashes_line.rstrip())
+
+    if show_answers:
+        arithmetic_format += "\n" + result_line.rstrip()
+
+    return arithmetic_format
 
 
-print(f'\n{arithmetic_arranger(["98 + 305", "38001 - 2", "45 + 43", "123 + 49"])}')
+print(f'\n{arithmetic_arranger(["32 - 698", "1 - 3801", "45 + 43", "123 + 49", "988 + 40"], True)}')
